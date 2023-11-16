@@ -25,7 +25,7 @@ public class EmployerController {
     @GetMapping("/")
     public String index(Model model) {
         List employers = (List<Employer>) employerRepository.findAll();
-        model.addAttribute("employers", employers);
+        model.addAttribute("employers", employers); //To figure out the name of the model attribute you should use to pass employers into the view, review this template.
         return "employers/index";
     }
 
@@ -52,7 +52,7 @@ public class EmployerController {
     @GetMapping("view/{employerId}")
     public String displayViewEmployer(Model model, @PathVariable int employerId) {
 
-        //I replaced NULL with employerRepository.findById(employerId);
+        //I replaced NULL with employerRepository.findById(***employerId***);
         Optional optEmployer = employerRepository.findById(employerId);
         if (optEmployer.isPresent()) {
             Employer employer = (Employer) optEmployer.get();
