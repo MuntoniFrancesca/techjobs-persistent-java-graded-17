@@ -20,7 +20,6 @@ public class SkillController {
 
     @Autowired
     private SkillRepository skillRepository;
-    //displayViewSkill
 
     @GetMapping("/")
     public String index(Model model) {
@@ -30,7 +29,7 @@ public class SkillController {
     }
 
     @GetMapping("add")
-    public String displayAllSkillForm(Model model) {
+    public String displayAddSkillForm(Model model) {
         model.addAttribute(new Skill());
         return "skills/add";
     }
