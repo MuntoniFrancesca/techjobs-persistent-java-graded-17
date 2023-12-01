@@ -30,13 +30,14 @@ public class HomeController {
     private SkillRepository skillRepository;
 
     @Autowired
-    JobRepository jobRepository;
+    private JobRepository jobRepository;
 
     @RequestMapping("/")
     public String index(Model model) {
 
         model.addAttribute("title", "MyJobs");
-
+    List jobs = (List<Job>) jobRepository.findAll();
+    model.addAttribute("jobs", jobs);
         return "index";
     }
 
@@ -44,7 +45,12 @@ public class HomeController {
     public String displayAddJobForm(Model model) {
 	    model.addAttribute("title", "Add Job");
         model.addAttribute(new Job());
-        model.addAttribute("employers", employerRepository.findAll());
+        List employers = (List<Employer>) employerRepository.findAll();
+        model.addAttribute("employers", employers);
+
+        List skills = (List<Skill>) skillRepository.findAll();
+        model.addAttribute("skills", skills);
+
         return "add";
     }
 
@@ -55,26 +61,28 @@ public class HomeController {
                                        Errors errors, Model model, @RequestParam int employerId, @RequestParam List<Integer> skills) {
         if (errors.hasErrors()) {
 	    model.addAttribute("title", "Add Job");
-        model.addAttribute(newJob);
-        return "add";
+            List employers = (List<Employer>) employerRepository.findAll();
+            model.addAttribute("employers", employers);
+
+            return "add";
         }
-        Optional<Employer> result = employerRepository.findById(employerId);
-            if (result.isPresent()) {
-                Employer employer = result.get();
+        Optional<Employer> optEmployer = employerRepository.findById(employerId);
+            if (optEmployer.isPresent()) {
+                Employer employer = optEmployer.get();
                 newJob.setEmployer(employer);
             }
 
             //4.3 Then, to get the skills data from a list of ids (rather than a single id as we did with employer), use the CrudRepository method .findAllById(ids)
             List<Skill> skillObjs = (List<Skill>) skillRepository.findAllById(skills);
             newJob.setSkills(skillObjs);
-
+            jobRepository.save(newJob);
 
             return "redirect:";
     }
 
     @GetMapping("view/{jobId}")
     public String displayViewJob(Model model, @PathVariable int jobId) {
-
+    model.addAttribute("jobId", jobId);
             return "view";
     }
 

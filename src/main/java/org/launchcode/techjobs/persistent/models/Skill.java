@@ -11,13 +11,18 @@ public class Skill extends AbstractEntity {
 
    //TASK 4.1 In your Skill class, add a jobs field.
     @ManyToMany(mappedBy = "skills")
-   private final List<Job> jobs = new ArrayList<>();
+   private List<Job> jobs = new ArrayList<>();
 
     //add a description field
     private String description;
 
     //no args constructor
     public Skill() {}
+
+    public Skill(String description) {
+        super();
+        this.description = description;
+    }
 
     //public access methods
     public String getDescription() {
@@ -33,4 +38,7 @@ public class Skill extends AbstractEntity {
         return jobs;
     }
 
+    public void setJobs(List<Job> jobs) {
+        this.jobs = jobs;
+    }
 }
